@@ -28,7 +28,7 @@ func NewGoryMartini(host string) (*goryman.GorymanClient, martini.Handler) {
 		rw := res.(martini.ResponseWriter)
 		c.Next()
 
-		metric := float64(time.Since(start))
+		metric := float64(time.Since(start)) / float64(time.Millisecond)
 
 		err := riemann.SendEvent(&goryman.Event{
 			Service:     "http req",
