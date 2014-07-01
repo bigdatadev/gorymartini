@@ -28,18 +28,19 @@ func NewGoryMartini(host string) (*goryman.GorymanClient, martini.Handler) {
 		rw := res.(martini.ResponseWriter)
 		c.Next()
 
-		metric := float64(time.Since(start)) / float64(time.Millisecond)
+		metric := float64(time.Since(start))
 
 		err := riemann.SendEvent(&goryman.Event{
 			Service:     "http req",
 			Metric:      metric,
-			Description: fmt.Sprintf("Request took %f seconds.", metric),
+			Description: fmt.Sprintf("Completed request %v %s in %v.", rw.Status(), http.StatusText(rw.Status()), metric),
 			Tags: []string{
 				"http",
 			},
 			Attributes: map[string]string{
-				"path":   req.URL.Path,
-				"status": strconv.Itoa(rw.Status()),
+				"path":        req.URL.Path,
+				"status-code": strconv.Itoa(rw.Status()),
+				"status-text": http.StatusText(rw.Status()),
 			},
 		})
 		if err != nil {
