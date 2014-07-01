@@ -12,6 +12,7 @@ Logs the following information:
 To install the package for use in your own programs:
 
 ```
+go get github.com/bigdatadev/goryman
 go get github.com/bigdatadev/gorymartini
 ```
 
@@ -21,6 +22,7 @@ First we'll need to import the library:
 
 ```go
 import (
+    "github.com/bigdatadev/goryman"
     "github.com/bigdatadev/gorymartini"
 	"github.com/go-martini/martini"
 )
@@ -45,7 +47,8 @@ defer c.Close()
 Now we simply need to use the handler:
 
 ```go
-m := martini.Classic()
+m := martini.New()
+// ...
 m.Use(h)
 m.Run()
 ```
